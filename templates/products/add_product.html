@@ -1,0 +1,9 @@
+<h2>📝 상품 등록</h2>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <p>이름: <input type="text" name="name"></p>
+  <p>설명: <textarea name="description"></textarea></p>
+  <p>가격: <input type="number" name="price"></p>
+  <p>이미지: <input type="file" name="image"></p>
+  <button type="submit">등록</button>
+</form>

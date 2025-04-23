@@ -1,0 +1,9 @@
+<h2>📋 신고 목록</h2>
+{% for report in reports %}
+    <p>
+        {{ report.created_at|date:"Y-m-d H:i" }} -
+        <strong>{{ report.report_type }}</strong> 신고 by {{ report.reporter.username }} <br>
+        사유: {{ report.reason }}
+    </p>
+    <hr>
+{% endfor %}

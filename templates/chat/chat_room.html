@@ -1,0 +1,15 @@
+<h2>💬 전체 채팅방</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="content" placeholder="메시지를 입력하세요" style="width:300px;" required>
+    <button type="submit">전송</button>
+</form>
+
+<hr>
+
+<div style="max-height: 400px; overflow-y: scroll;">
+    {% for msg in messages %}
+        <p><strong>{{ msg.user.username }}</strong>: {{ msg.content }} <small>{{ msg.timestamp|date:"H:i:s" }}</small></p>
+    {% endfor %}
+</div>

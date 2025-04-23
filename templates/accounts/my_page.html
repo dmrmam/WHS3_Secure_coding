@@ -1,0 +1,27 @@
+<h2>🙋 마이페이지</h2>
+<p><strong>아이디:</strong> {{ user.username }}</p>
+<p><strong>이메일:</strong> {{ user.email }}</p>
+
+<hr>
+
+<h3>📦 내가 등록한 상품</h3>
+{% for product in products %}
+  <div>
+    <strong>{{ product.name }}</strong> - ₩{{ product.price }}
+    <br>{{ product.description }}
+    <hr>
+  </div>
+{% empty %}
+  <p>등록한 상품이 없습니다.</p>
+{% endfor %}
+
+<h3>🚨 내가 작성한 신고</h3>
+{% for report in reports %}
+  <div>
+    <strong>{{ report.get_report_type_display }}</strong> | {{ report.reason }}
+    <small>{{ report.created_at|date:"Y-m-d H:i" }}</small>
+    <hr>
+  </div>
+{% empty %}
+  <p>작성한 신고가 없습니다.</p>
+{% endfor %}
