@@ -43,10 +43,10 @@ tiny_second_hand_shopping_platform/
 - [x] 전체 채팅방 기능 구현 (로그인 필요)
 - [x] 사용자 / 상품 신고 기능 구현
 - [x] 로그인 상태에 따라 메뉴 동적 표시
-- [ ] 인증되지 않은 사용자 접근 제한 (`@login_required`)
-- [ ] 모든 폼에 CSRF 토큰 적용
-- [ ] 입력값 escape 처리 (XSS 방지)
-- [ ] 비밀번호 해시 저장 처리 (Django 기본 제공)
+- [x] 인증되지 않은 사용자 접근 제한 (`@login_required`)
+- [x] 모든 폼에 CSRF 토큰 적용
+- [x] 입력값 escape 처리 (XSS 방지)
+- [x] 비밀번호 해시 저장 처리 (Django 기본 제공)
 - [ ] 이미지 업로드 기능 구현 (ImageField 사용)
 - [ ] 관리자 페이지 활성화 및 확인 (`/admin/`)
 - [ ] `.env`를 통한 민감정보 관리 (선택 적용)
