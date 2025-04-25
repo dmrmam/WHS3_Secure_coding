@@ -1,0 +1,7 @@
+<h2>{{ target_type }} "{{ target_name }}" 신고하기</h2>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">🚨 신고 제출</button>
+</form>

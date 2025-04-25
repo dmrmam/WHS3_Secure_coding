@@ -1,15 +1,36 @@
 <h2>📦 상품 목록</h2>
 <a href="/products/add/">상품 등록하기</a>
+
+<!-- 검색 폼 -->
+<form method="get" action="{% url 'product_list' %}" style="margin-top: 20px;">
+  <input type="text" name="q" placeholder="상품명 또는 설명 검색" value="{{ request.GET.q }}" style="width: 300px;">
+  <button type="submit">검색</button>
+</form>
+
 <hr>
-{% for product in products %}
-  <div>
-    <h3>{{ product.name }}</h3>
-    {% if product.image %}
-      <img src="{{ product.image.url }}" width="200">
-    {% endif %}
-    <p>{{ product.description }}</p>
-    <p><strong>₩{{ product.price }}</strong></p>
-    <p>판매자: {{ product.seller.username }}</p>
-    <hr>
-  </div>
-{% endfor %}
+
+{% if products %}
+  {% for product in products %}
+    <div>
+      <h3>{{ product.name }}</h3>
+      {% if product.image %}
+        <img src="{{ product.image.url }}" width="200">
+      {% endif %}
+      <p>{{ product.description }}</p>
+      <p><strong>₩{{ product.price }}</strong></p>
+      <p>판매자: {{ product.seller.username }}</p>
+      <a href="{% url 'report_product' product.id %}">🚨 상품 신고</a>
+
+      {% if request.user != product.seller %}
+        <form method="post" action="{% url 'request_purchase' product.id %}">
+          {% csrf_token %}
+          <button type="submit">구매 요청</button>
+        </form>
+      {% endif %}
+
+      <hr>
+    </div>
+  {% endfor %}
+{% else %}
+  <p>검색 결과가 없습니다.</p>
+{% endif %}

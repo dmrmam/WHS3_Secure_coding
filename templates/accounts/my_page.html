@@ -15,6 +15,19 @@
   <p>등록한 상품이 없습니다.</p>
 {% endfor %}
 
+<hr>
+<h3>🚷 사용자 신고</h3>
+{% for user in users %}
+  <div>
+    <strong>{{ user.username }}</strong> ({{ user.email }})
+    <br>
+    <a href="{% url 'report_user' user.id %}">🚨 이 사용자 신고하기</a>
+    <hr>
+  </div>
+{% empty %}
+  <p>신고 가능한 사용자가 없습니다.</p>
+{% endfor %}
+
 <h3>🚨 내가 작성한 신고</h3>
 {% for report in reports %}
   <div>
@@ -24,4 +37,17 @@
   </div>
 {% empty %}
   <p>작성한 신고가 없습니다.</p>
+{% endfor %}
+
+<h3>📨 구매 요청 목록</h3>
+{% for pr in incoming_requests %}
+  <div>
+    <p>{{ pr.buyer.username }}님이 '{{ pr.product.name }}' 구매를 요청했습니다.</p>
+    <form method="post" action="{% url 'accept_purchase' pr.id %}">
+      {% csrf_token %}
+      <button type="submit">확인</button>
+    </form>
+  </div>
+{% empty %}
+  <p>구매 요청이 없습니다.</p>
 {% endfor %}

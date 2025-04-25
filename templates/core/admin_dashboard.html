@@ -1,0 +1,52 @@
+<h2>🔧 관리자 대시보드</h2>
+
+<h2>👤 사용자 목록</h2>
+<table border="1">
+  <tr>
+    <th>아이디</th><th>계정</th><th>상태</th><th>조치</th>
+  </tr>
+  {% for user in users %}
+    <tr>
+      <td>{{ user.id }}</td>
+      <td>{{ user.username }}</td>
+      <td>
+        {% if user.is_banned %}
+          🔒 정지됨
+        {% else %}
+          ✅ 정상
+        {% endif %}
+      </td>
+      <td>
+        {% if not user.is_superuser %}
+          {% if user.is_banned %}
+            <a href="{% url 'unban_user' user.id %}">해제</a>
+          {% else %}
+            <a href="{% url 'ban_user' user.id %}">밴</a>
+          {% endif %}
+          | <a href="{% url 'delete_user' user.id %}">탈퇴</a>
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+</table>
+
+<h3>📦 상품 목록</h3>
+<ul>
+  {% for product in products %}
+    <li>{{ product.name }} - {{ product.price }}₩ / 판매자: {{ product.seller.username }}</li>
+  {% endfor %}
+</ul>
+
+<h3>💬 메시지 로그</h3>
+<ul>
+  {% for msg in messages %}
+    <li>{{ msg.timestamp }} - {{ msg.user.username }}: {{ msg.content }}</li>
+  {% endfor %}
+</ul>
+
+<h3>🚨 신고 목록</h3>
+<ul>
+  {% for report in reports %}
+    <li>{{ report.created_at }} - {{ report.reporter.username }} → {{ report.report_type }}</li>
+  {% endfor %}
+</ul>

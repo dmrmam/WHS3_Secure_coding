@@ -1,40 +1,57 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Report
+from .forms import ReportForm
 from products.models import Product
-from django.contrib.auth.models import User
+from accounts.models import CustomUser
 
+# 상품 신고
 @login_required
-def add_report(request):
+def report_product(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+
     if request.method == 'POST':
-        report_type = request.POST.get('report_type')
-        reason = request.POST.get('reason')
-        reported_id = request.POST.get('reported_id')
+        form = ReportForm(request.POST)
+        if form.is_valid():
+            report = form.save(commit=False)
+            report.report_type = 'product'
+            report.reporter = request.user
+            report.reported_product = product
+            report.save()
+            return redirect('/')
+    else:
+        form = ReportForm()
 
-        report = Report(
-            report_type=report_type,
-            reason=reason,
-            reporter=request.user
-        )
+    return render(request, 'reports/report_form.html', {
+        'form': form,
+        'target_type': '상품',
+        'target_name': product.name
+    })
 
-        if report_type == 'user':
-            try:
-                report.reported_user = User.objects.get(id=reported_id)
-            except:
-                pass
-        elif report_type == 'product':
-            try:
-                report.reported_product = Product.objects.get(id=reported_id)
-            except:
-                pass
+# 사용자 신고
+@login_required
+def report_user(request, user_id):
+    target_user = get_object_or_404(CustomUser, id=user_id)
 
-        report.save()
-        return redirect('/reports/')
+    if request.method == 'POST':
+        form = ReportForm(request.POST)
+        if form.is_valid():
+            report = form.save(commit=False)
+            report.report_type = 'user'
+            report.reporter = request.user
+            report.reported_user = target_user
+            report.save()
+            return redirect('/')
+    else:
+        form = ReportForm()
 
-    users = User.objects.exclude(id=request.user.id)
-    products = Product.objects.all()
-    return render(request, 'reports/add_report.html', {'users': users, 'products': products})
+    return render(request, 'reports/report_form.html', {
+        'form': form,
+        'target_type': '사용자',
+        'target_name': target_user.username
+    })
 
+# 관리자용 신고 목록 조회
 @login_required
 def report_list(request):
     reports = Report.objects.all().order_by('-created_at')
